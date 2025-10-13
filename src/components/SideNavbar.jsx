@@ -8,10 +8,12 @@ import AgentDetails from "./AgentDetails";
 import NotificationSidebar from "./NotificationSidebar";
 import CustomerSupport from "../assets/add-user.svg";
 import CreateAgentForm from "./CreateAgentForm";
+import Dashboard from "../pages/overview/page";
+
 
 
 function SideNavbar() {
-  const [activeItem, setActiveItem] = useState("Home");
+  const [activeItem, setActiveItem] = useState("Overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -137,7 +139,7 @@ function SideNavbar() {
   }, [isSearchOpen]);
 
   const menuItems = [
-    { name: "Home", icon: <TbSmartHome /> },
+    { name: "Overview", icon: <TbSmartHome /> },
     { name: "Agents", icon: <IoMdContacts /> },
     { name: "Contacts", icon: <FaList /> },
     { name: "Files", icon: <FaRegFolderOpen /> },
@@ -216,6 +218,12 @@ function SideNavbar() {
         </div>
 
         {/* Content Area */}
+        {activeItem === "Overview" && (
+          <div className="flex-1 overflow-y-auto">
+            <Dashboard />
+          </div>
+        )}
+
         {activeItem === "Agents" && (
           <div className="flex flex-1">
             {!isCreatingAgent ? (
