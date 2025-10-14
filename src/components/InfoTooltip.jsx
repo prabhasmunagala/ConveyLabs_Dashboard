@@ -1,30 +1,80 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
 export default function InfoTooltip({ info }) {
   const [visible, setVisible] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const iconRef = useRef(null);
+  const tooltipRef = useRef(null);
+  const hideTimeout = useRef(null);
 
+  // Detect touch device
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   useEffect(() => {
     setIsTouchDevice(navigator.maxTouchPoints > 0);
   }, []);
 
-  const handleToggle = () => {
-    if (isTouchDevice) {
-      setVisible((prev) => !prev);
-    }
+  const computePosition = () => {
+    const rect = iconRef.current.getBoundingClientRect();
+    setPosition({
+      top: rect.top + window.scrollY + rect.height / 2,
+      left: rect.right + window.scrollX + 8,
+    });
   };
 
+  const showTooltip = () => {
+    computePosition();
+    clearTimeout(hideTimeout.current);
+    setVisible(true);
+  };
+
+  const hideTooltip = () => {
+    hideTimeout.current = setTimeout(() => setVisible(false), 150);
+  };
+
+  const cancelHide = () => {
+    clearTimeout(hideTimeout.current);
+  };
+
+  // Hide on outside click or Escape
+  useEffect(() => {
+    if (!visible) return;
+
+    const handleClickOutside = (e) => {
+      if (
+        tooltipRef.current &&
+        !tooltipRef.current.contains(e.target) &&
+        !iconRef.current.contains(e.target)
+      ) {
+        setVisible(false);
+      }
+    };
+
+    const handleEscape = (e) => {
+      if (e.key === "Escape") setVisible(false);
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [visible]);
+
   return (
-    <div
-      className="relative inline-block"
-      onMouseEnter={() => !isTouchDevice && setVisible(true)}
-      onMouseLeave={() => !isTouchDevice && setVisible(false)}
-    >
-      <button
-        type="button"
-        aria-label="More info"
-        onClick={handleToggle}
-        className="ml-1 text-gray-400 hover:text-blue-500 focus:outline-none"
+    <>
+      <span
+        ref={iconRef}
+        onMouseEnter={() => !isTouchDevice && showTooltip()}
+        onMouseLeave={() => !isTouchDevice && hideTooltip()}
+        onClick={(e) => {
+          if (isTouchDevice) {
+            e.stopPropagation();
+            visible ? setVisible(false) : showTooltip();
+          }
+        }}
+        className="inline-block ml-1 text-gray-400 hover:text-blue-500 cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -35,22 +85,27 @@ export default function InfoTooltip({ info }) {
           strokeWidth={2}
         >
           <circle cx="12" cy="12" r="10" />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 16v-4m0-4h.01"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 16v-4m0-4h.01" />
         </svg>
-      </button>
+      </span>
 
-      {visible && (
-        <div
-          role="tooltip"
-          className="absolute z-10 w-48 p-2 text-xs text-white bg-blue-500 rounded shadow-lg left-full ml-2 top-1/2 -translate-y-1/2"
-        >
-          {info}
-        </div>
-      )}
-    </div>
+      {visible &&
+        createPortal(
+          <div
+            ref={tooltipRef}
+            className="fixed z-50 w-80 max-w-[90vw] p-3 text-sm text-white bg-blue-600 rounded shadow-lg select-text whitespace-pre-wrap break-words"
+            style={{
+              top: position.top,
+              left: position.left,
+              transform: "translateY(-50%)",
+            }}
+            onMouseEnter={cancelHide}
+            onMouseLeave={hideTooltip}
+          >
+            {info}
+          </div>,
+          document.body
+        )}
+    </>
   );
 }

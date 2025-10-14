@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { FaUserCircle } from "react-icons/fa";
+import InfoTooltip from "./InfoTooltip";
+import { MdSettingsSuggest } from "react-icons/md";
 
 export default function CreateAgentForm({ templates, onCancel }) {
   const [showDialog, setShowDialog] = useState(false);
@@ -34,6 +35,7 @@ export default function CreateAgentForm({ templates, onCancel }) {
           <label className="mt-6 block text-sm font-medium mb-2 text-black" htmlFor="agentName">
             Agent Name
           </label>
+
           <input
             id="agentName"
             type="text"
@@ -42,30 +44,49 @@ export default function CreateAgentForm({ templates, onCancel }) {
             value={agentName}
             onChange={(e) => setAgentName(e.target.value)}
           />
-          <p className="text-xs text-gray-500 mb-6">
-            This can be adjusted at any time after creation
+
+          <p className="text-xs text-gray-500 mb-6 flex items-start gap-1">
+            <InfoTooltip info="This can be adjusted at any time after creation." />
+            <span>This can be adjusted at any time after creation.</span>
           </p>
+          <div className="flex items-center my-4 text-gray-400 text-sm">
+            <div className="flex-grow border-t border-gray-300" />
+            <span className="mx-2">or</span>
+            <div className="flex-grow border-t border-gray-300" />
+          </div>
+
 
           <div
-            className="bg-gray-100 p-4 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition"
+            className="bg-gray-100 p-4 rounded-lg flex items-center gap-3 cursor-pointer hover:bg-gray-200 transition shadow-sm"
             onClick={() => setShowDialog(true)}
           >
-            <FaUserCircle className="text-xl text-gray-500" />
-            <div>
-              <h3 className="text-sm text-black font-medium">Custom Starter</h3>
-              <p className="text-xs text-gray-500">A minimalist starting point with basic config</p>
+            <MdSettingsSuggest className="text-4xl text-gray-500" />
+            <div className="relative pr-6">
+              <div className="max-w-[85%]">
+                <h3 className="text-sm text-black font-medium">Custom Starter</h3>
+                <p className="text-xs text-gray-500">
+                  A minimalist starting point with basic configuration, designed for crafting your unique assistant.
+                </p>
+              </div>
+
+              {/* Right-aligned arrow */}
+              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-2xl text-gray-400">
+                &gt;
+              </span>
             </div>
+
+
           </div>
         </div>
 
         {/* Right side: Templates */}
-        <div className="w-1/2">
+        <div className="w-1/2 bg-white p-4 border-2 border-gray-200 rounded-lg shadow-sm">
           <h2 className="text-xl font-semibold mb-4">Choose Templates</h2>
-          <div className="grid grid-cols-2 gap-8 mt-8">
+          <div className="grid grid-cols-2 gap-8 mt-8 ">
             {templates.map(({ name, desc, iconPath }, index) => (
               <div
                 key={index}
-                className="p-4 rounded-lg shadow-sm flex flex-col justify-between h-full cursor-pointer hover:shadow-md transition"
+                className="p-4 rounded-lg shadow-sm flex flex-col justify-between h-full cursor-pointer hover:shadow-md transition bg-white border-2 border-gray-200"
                 onClick={() => handleTryNow(name)}
               >
                 <div>

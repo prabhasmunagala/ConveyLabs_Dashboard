@@ -4,16 +4,15 @@ import { IoMdContacts, IoIosAddCircleOutline, IoIosSearch } from "react-icons/io
 import { FaRegFolderOpen, FaPhoneAlt, FaPlug, FaRegBookmark, FaUserCircle, FaList } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
 import { GoBell } from "react-icons/go";
-import AgentDetails from "./AgentDetails";
 import NotificationSidebar from "./NotificationSidebar";
+import TopNavbar from "./TopNavbar";
+import Agents from "./Agents";
 import CustomerSupport from "../assets/add-user.svg";
-import CreateAgentForm from "./CreateAgentForm";
-import Dashboard from "../pages/overview/page";
-
+// import CreateAgentForm from "./CreateAgentForm";
 
 
 function SideNavbar() {
-  const [activeItem, setActiveItem] = useState("Overview");
+  const [activeItem, setActiveItem] = useState("Home");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,10 +28,11 @@ function SideNavbar() {
       maxTokens: 25,
       // temperature: 0.7,
       // detectEmotion: false,
+      //
     },
     "Agent Name 02": {
       email: "agent02@example.com",
-      firstMessage: "Hello!",
+      firstMessage: "",
       systemPrompt: "",
       maxTokens: 30,
       // temperature: 0.5,
@@ -139,7 +139,7 @@ function SideNavbar() {
   }, [isSearchOpen]);
 
   const menuItems = [
-    { name: "Overview", icon: <TbSmartHome /> },
+    { name: "Home", icon: <TbSmartHome /> },
     { name: "Agents", icon: <IoMdContacts /> },
     { name: "Contacts", icon: <FaList /> },
     { name: "Files", icon: <FaRegFolderOpen /> },
@@ -182,87 +182,31 @@ function SideNavbar() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Navbar */}
-        <div className="bg-white border-b border-gray-300 px-6 py-4 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-gray-800">{activeItem}</h2>
-          <ul className="flex space-x-6 text-gray-700 font-medium">
-            <li className="relative">
-              {isSearchOpen ? (
-                <div ref={inputRef} className="flex items-center border border-gray-300 rounded overflow-hidden" style={{ width: "200px" }}>
-                  <input
-                    type="text"
-                    autoFocus
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") alert(`Searching: ${searchQuery}`);
-                      else if (e.key === "Escape") setIsSearchOpen(false);
-                    }}
-                    placeholder="Search..."
-                    className="px-2 py-1 w-full focus:outline-none"
-                  />
-                  <button className="px-3 text-gray-600 hover:text-blue-600" type="button">
-                    <IoIosSearch />
-                  </button>
-                </div>
-              ) : (
-                <button onClick={() => setIsSearchOpen(true)} className="hover:text-blue-600 text-2xl" type="button">
-                  <IoIosSearch />
-                </button>
-              )}
-            </li>
-            <li className="relative hover:text-blue-600 text-2xl cursor-pointer" onClick={() => setIsNotificationSidebarOpen((p) => !p)}>
-              <GoBell />
-              {hasNotification && <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-600 rounded-full ring-2 ring-white"></span>}
-            </li>
-          </ul>
-        </div>
+        <TopNavbar
+          activeItem={activeItem}
+          isSearchOpen={isSearchOpen}
+          setIsSearchOpen={setIsSearchOpen}
+          inputRef={inputRef}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          isNotificationSidebarOpen={isNotificationSidebarOpen}
+          setIsNotificationSidebarOpen={setIsNotificationSidebarOpen}
+          hasNotification={hasNotification}
+          setHasNotification={setHasNotification}
+          setIsCreatingAgent={setIsCreatingAgent}
+        />
 
         {/* Content Area */}
-        {activeItem === "Overview" && (
-          <div className="flex-1 overflow-y-auto">
-            <Dashboard />
-          </div>
-        )}
-
         {activeItem === "Agents" && (
-          <div className="flex flex-1">
-            {!isCreatingAgent ? (
-              <>
-                {/* Agent List Sidebar */}
-                <div className="w-1/4 bg-gray-50 p-4 border-r border-gray-300">
-                  <h3 className="flex items-center justify-between text-lg font-semibold mb-4">
-                    All Agents
-                    <IoIosAddCircleOutline
-                      className="text-indigo-600 hover:text-indigo-800 cursor-pointer text-2xl"
-                      onClick={() => setIsCreatingAgent(true)}
-                    />
-                  </h3>
-                  <ul className="space-y-2">
-                    {Object.keys(agents).map((agent) => (
-                      <li
-                        key={agent}
-                        className={`p-2 rounded cursor-pointer ${agent === selectedAgent ? "bg-blue-100" : "hover:bg-gray-200"}`}
-                        onClick={() => setSelectedAgent(agent)}
-                      >
-                        {agent}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Agent Details */}
-                <div className="w-3/4 p-6 overflow-y-auto">
-                  <AgentDetails
-                    agentName={selectedAgent}
-                    agentData={agents[selectedAgent]}
-                    updateAgentData={(data) => updateAgentData(selectedAgent, data)}
-                  />
-                </div>
-              </>
-            ) : (
-              <CreateAgentForm templates={templates} onCancel={() => setIsCreatingAgent(false)} />
-            )}
-          </div>
+          <Agents
+            agents={agents}
+            selectedAgent={selectedAgent}
+            setSelectedAgent={setSelectedAgent}
+            isCreatingAgent={isCreatingAgent}
+            setIsCreatingAgent={setIsCreatingAgent}
+            templates={templates}
+            updateAgentData={updateAgentData}
+          />
         )}
 
         {/* Notification Sidebar */}
