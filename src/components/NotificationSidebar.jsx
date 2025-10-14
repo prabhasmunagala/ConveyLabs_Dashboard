@@ -38,7 +38,7 @@ function NotificationSidebar({ isOpen, onClose, notifications }) {
                 </ul>
               </div>
             )}
-
+{/*  */}
             <div>
               <p className="text-gray-700 font-semibold mb-2">Older</p>
               <ul className="space-y-2">
