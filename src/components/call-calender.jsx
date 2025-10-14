@@ -6,8 +6,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./ui/button";
 
-
-
 // Helper: categorize call volume into low, medium, high
 function getCallVolumeCategory(callCount) {
   if (callCount === 0) return "none"
@@ -20,6 +18,12 @@ export function CallCalendar({ callData }) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [calendarDays, setCalendarDays] = useState([])
   const [monthPickerOpen, setMonthPickerOpen] = useState(false)
+  const [yearPicker, setYearPicker] = useState(false)
+  const [yearRange, setYearRange] = useState([
+  Math.floor(currentDate.getFullYear() / 12) * 12,
+  Math.floor(currentDate.getFullYear() / 12) * 12 + 11,
+])
+
   const pickerRef = useRef(null)
   useEffect(() => {
     function onDocClick(e) {
@@ -91,53 +95,97 @@ export function CallCalendar({ callData }) {
               >
                 <span>{monthNames[currentDate.getMonth()].slice(0, 3)}</span>
                 <svg className="h-3 w-3" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 8l4 4 4-4" stroke="#6D84F0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 8l4 4 4-4" stroke="#0c8ae6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
 
               {monthPickerOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md bg-white border-0 shadow p-2 z-50">
-                  {/* Year controls */}
+                <div className="absolute right-0 mt-2 w-52 rounded-md bg-white border-0 shadow p-2 z-50">
+                  {/* Header: toggle between month & year picker */}
                   <div className="flex items-center justify-between mb-2">
                     <button
                       type="button"
-                      onClick={() => setCurrentDate(new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1))}
+                      onClick={() =>
+                        yearPicker
+                          ? setYearRange([yearRange[0] - 12, yearRange[1] - 12])
+                          : setCurrentDate(new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), 1))
+                      }
                       className="p-1 rounded hover:bg-gray-100"
-                      aria-label="Previous year"
+                      aria-label="Previous"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </button>
-                    <div className="text-sm font-medium" style={{ color: "#1F3B9A" }}>
-                      {currentDate.getFullYear()}
-                    </div>
+
                     <button
                       type="button"
-                      onClick={() => setCurrentDate(new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1))}
+                      onClick={() => setYearPicker((prev) => !prev)}
+                      className="text-sm font-medium"
+                      style={{ color: "#1F3B9A" }}
+                    >
+                      {yearPicker
+                        ? `${yearRange[0]} - ${yearRange[1]}`
+                        : currentDate.getFullYear()}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        yearPicker
+                          ? setYearRange([yearRange[0] + 12, yearRange[1] + 12])
+                          : setCurrentDate(new Date(currentDate.getFullYear() + 1, currentDate.getMonth(), 1))
+                      }
                       className="p-1 rounded hover:bg-gray-100"
-                      aria-label="Next year"
+                      aria-label="Next"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    {monthNames.map((m, idx) => (
-                      <button
-                        key={m}
-                        type="button"
-                        onClick={() => {
-                          setCurrentDate(new Date(currentDate.getFullYear(), idx, 1))
-                          setMonthPickerOpen(false)
-                        }}
-                        className={`rounded px-2 py-1 text-xs text-left ${currentDate.getMonth() === idx ? "bg-[#E6EEFF]" : "hover:bg-gray-100"}`}
-                        style={{ color: "#1F3B9A" }}
-                      >
-                        {m.slice(0, 3)}
-                      </button>
-                    ))}
-                  </div>
+                  {/* Conditional: show months OR years */}
+                  {!yearPicker ? (
+                    <div className="grid grid-cols-3 gap-2">
+                      {monthNames.map((m, idx) => (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => {
+                            setCurrentDate(new Date(currentDate.getFullYear(), idx, 1))
+                            setMonthPickerOpen(false)
+                          }}
+                          className={`rounded px-2 py-1 text-xs text-left ${
+                            currentDate.getMonth() === idx ? "bg-[#E6EEFF]" : "hover:bg-gray-100"
+                          }`}
+                          style={{ color: "#1F3B9A" }}
+                        >
+                          {m.slice(0, 3)}
+                        </button>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-2">
+                      {Array.from({ length: 12 }).map((_, i) => {
+                        const year = yearRange[0] + i
+                        return (
+                          <button
+                            key={year}
+                            onClick={() => {
+                              setCurrentDate(new Date(year, currentDate.getMonth(), 1))
+                              setYearPicker(false)
+                            }}
+                            className={`rounded px-2 py-1 text-xs ${
+                              currentDate.getFullYear() === year ? "bg-[#E6EEFF]" : "hover:bg-gray-100"
+                            }`}
+                            style={{ color: "#1F3B9A" }}
+                          >
+                            {year}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               )}
+
             </div>
 
             <span className="text-sm" style={{ color: "#6D84F0" }}>
@@ -174,7 +222,7 @@ export function CallCalendar({ callData }) {
                     ? "bg-[#E4E8FC]"
                     : category === "medium"
                     ? "bg-[#AEBBFA]"
-                    : "bg-[#6D84F0]"
+                    : "bg-[#068fff]"
 
                 const textColor = category === "high" ? "text-white" : "text-[#3C4BB8]"
 

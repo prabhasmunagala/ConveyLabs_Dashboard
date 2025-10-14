@@ -5,7 +5,7 @@ function TopNavbar(props) {
   const { activeItem, isSearchOpen, setIsSearchOpen, inputRef, searchQuery, setSearchQuery, setIsNotificationSidebarOpen, hasNotification } = props;
   return (
     <div className="bg-white border-b border-gray-300 px-6 py-4 flex justify-between items-center">
-      <h2 clas sName="text-xl font-semibold text-gray-800">{activeItem}</h2>
+  <h2 className="text-xl font-semibold text-gray-800">{activeItem}</h2>
       <ul className="flex space-x-6 text-gray-700 font-medium">
         <li className="relative">
           {isSearchOpen ? (

@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { TbSmartHome } from "react-icons/tb";
-import { IoMdContacts, IoIosAddCircleOutline, IoIosSearch } from "react-icons/io";
+import { IoMdContacts} from "react-icons/io";
 import { FaRegFolderOpen, FaPhoneAlt, FaPlug, FaRegBookmark, FaUserCircle, FaList } from "react-icons/fa";
 import { BiLogOut } from "react-icons/bi";
-import { GoBell } from "react-icons/go";
 import NotificationSidebar from "./NotificationSidebar";
 import TopNavbar from "./TopNavbar";
-import Agents from "./Agents";
+import Agents from "../pages/agents/Agents";
 import CustomerSupport from "../assets/add-user.svg";
 // import CreateAgentForm from "./CreateAgentForm";
-
+import Dashboard from "../pages/overview/page";
+import CallLogs from "../pages/call_logs/page";
 
 function SideNavbar() {
-  const [activeItem, setActiveItem] = useState("Home");
+  const [activeItem, setActiveItem] = useState("Overview");
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isCreatingAgent, setIsCreatingAgent] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -139,7 +139,7 @@ function SideNavbar() {
   }, [isSearchOpen]);
 
   const menuItems = [
-    { name: "Home", icon: <TbSmartHome /> },
+    { name: "Overview", icon: <TbSmartHome /> },
     { name: "Agents", icon: <IoMdContacts /> },
     { name: "Contacts", icon: <FaList /> },
     { name: "Files", icon: <FaRegFolderOpen /> },
@@ -152,9 +152,9 @@ function SideNavbar() {
   return (
     <div className="flex h-screen">
       {/* Sidebar */}
-      <div className={`bg-gray-100 border-r border-gray-300 transition-all duration-300 flex flex-col justify-between ${isSidebarOpen ? "w-64" : "w-16"} p-4`}>
+      <div className={`bg-#d7d7d7 border-r border-white-300 transition-all duration-300 flex flex-col justify-between ${isSidebarOpen ? "w-64" : "w-16"} p-4`}>
         <div>
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="mb-4 p-2 text-gray-600 hover:text-blue-600">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="mb-4 p-2 text-white-600 hover:text-blue-600">
             <BiLogOut className="w-6 h-6" />
           </button>
           <ul className="space-y-4 text-black font-medium">
@@ -162,7 +162,7 @@ function SideNavbar() {
               item.name ? (
                 <li
                   key={item.name}
-                  className={`flex items-center gap-2 p-2 rounded cursor-pointer transition ${activeItem === item.name ? "bg-blue-600 text-white" : "hover:text-blue-600"
+                  className={`flex items-center gap-2 p-2 rounded cursor-pointer transition ${activeItem === item.name ? "bg-[#068fff] text-white" : "hover:text-blue-600"
                     }`}
                   onClick={() => {
                     setActiveItem(item.name);
@@ -197,6 +197,11 @@ function SideNavbar() {
         />
 
         {/* Content Area */}
+        {activeItem === "Overview" && (
+          <div className="flex-1 overflow-y-auto">
+            <Dashboard />
+          </div>
+        )}
         {activeItem === "Agents" && (
           <Agents
             agents={agents}
@@ -207,6 +212,11 @@ function SideNavbar() {
             templates={templates}
             updateAgentData={updateAgentData}
           />
+        )}
+        {activeItem === "Call Logs" && (
+          <div className="flex-1 overflow-y-auto">
+            <CallLogs/>
+          </div>
         )}
 
         {/* Notification Sidebar */}

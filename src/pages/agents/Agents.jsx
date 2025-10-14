@@ -1,6 +1,6 @@
 import React from 'react';
-import AgentsDetails from './AgentsDetails';
-import CreateAgentForm from './CreateAgentForm';
+import AgentsDetails from '../../components/AgentsDetails';
+import CreateAgentForm from '../../components/CreateAgentForm';
 import { IoIosAddCircleOutline } from "react-icons/io";
 
 function Agents(props) {

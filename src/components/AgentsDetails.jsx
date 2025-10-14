@@ -242,7 +242,7 @@ function AgentDetails({ agentName, agentData, updateAgentData }) {
           <div className="w-2/3 text-gray-700 text-sm">
             <h2 className="mb-4 font-semibold text-lg">Instructions :</h2>
 
-            <div className="space-y-6 overflow-y-auto h-[460px] pr-2"> {/* Adjust height if needed */}
+            <div className="space-y-6 overflow-y-auto h-[460px] pr-2 "> {/* Adjust height if needed */}
               {/* This section scrolls */}
               <div>
                 <label className="block mb-1 font-medium text-gray-700">

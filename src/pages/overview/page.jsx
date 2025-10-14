@@ -2,7 +2,7 @@ import React from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Search } from "lucide-react";
 import { CallCalendar } from "../../components/call-calender";
-
+import DonutCard from "../../components/ui/pie-chart";
 
 const Dashboard = () => {
 
@@ -17,6 +17,14 @@ const Dashboard = () => {
     { name: "Total Spent", value: 90 },
     { name: "Average Cost Per Call", value: 89 },
   ];
+  const DonutCardDemo = () => {
+  const fakeData = [
+    { name: "Answered Calls", value: 45 },
+    { name: "Missed Calls", value: 15 },
+    { name: "Voicemails", value: 10 },
+    { name: "Scheduled", value: 30 },
+  ]
+}
 
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f7f"];
 
@@ -104,56 +112,34 @@ const Dashboard = () => {
         <p className="text-sm text-gray-500 mb-4">
           Quick overview of your call performance
         </p>
+
         <div className="grid grid-cols-2 gap-4">
           {/* Reason Call Ended */}
-          <div className="bg-gray-50 p-4 rounded-2xl">
-            <h5 className="font-medium mb-2">Reason Call Ended</h5>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={data1}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {data1.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+          <DonutCard
+            title="Reason Call Ended"
+            data={[
+              { name: "Customer Hung Up", value: 35 },
+              { name: "Agent Ended", value: 25 },
+              { name: "Connection Lost", value: 15 },
+              { name: "Transferred", value: 25 },
+            ]}
+            colors={["#4F46E5", "#22C55E", "#F97316", "#E11D48"]}
+          />
 
           {/* Average Call Duration */}
-          <div className="bg-gray-50 p-4 rounded-2xl">
-            <h5 className="font-medium mb-2">Average Call Duration by Assistant</h5>
-            <ResponsiveContainer width="100%" height={200}>
-              <PieChart>
-                <Pie
-                  data={data1}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#82ca9d"
-                  dataKey="value"
-                >
-                  {data1.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
+          <DonutCard
+            title="Average Call Duration by Assistant"
+            data={[
+              { name: "Assistant A", value: 120 },
+              { name: "Assistant B", value: 90 },
+              { name: "Assistant C", value: 150 },
+              { name: "Assistant D", value: 80 },
+            ]}
+            colors={["#10B981", "#6366F1", "#F59E0B", "#EF4444"]}
+          />
         </div>
       </div>
+
     </div>
   );
 };

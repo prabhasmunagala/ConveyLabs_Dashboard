@@ -1,0 +1,32 @@
+[
+  {
+    "speaker": "Agent",
+    "text": "Hi, thank you for calling support. How can I help you today?",
+    "time": "08:00 AM"
+  },
+  {
+    "speaker": "Customer",
+    "text": "Hi, I’m having trouble logging into my account.",
+    "time": "08:01 AM"
+  },
+  {
+    "speaker": "Agent",
+    "text": "I can help with that. Can you please confirm your email address?",
+    "time": "08:02 AM"
+  },
+  {
+    "speaker": "Customer",
+    "text": "Yes, it’s user@example.com.",
+    "time": "08:03 AM"
+  },
+  {
+    "speaker": "Agent",
+    "text": "Thank you! Let me pull up your account.",
+    "time": "08:04 AM"
+  },
+  {
+    "speaker": "Customer",
+    "text": "Sure, take your time.",
+    "time": "08:05 AM"
+  }
+]
