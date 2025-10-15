@@ -20,9 +20,9 @@ export function CallCalendar({ callData }) {
   const [monthPickerOpen, setMonthPickerOpen] = useState(false)
   const [yearPicker, setYearPicker] = useState(false)
   const [yearRange, setYearRange] = useState([
-  Math.floor(currentDate.getFullYear() / 12) * 12,
-  Math.floor(currentDate.getFullYear() / 12) * 12 + 11,
-])
+    Math.floor(currentDate.getFullYear() / 12) * 12,
+    Math.floor(currentDate.getFullYear() / 12) * 12 + 11,
+  ])
 
   const pickerRef = useRef(null)
   useEffect(() => {
@@ -73,11 +73,11 @@ export function CallCalendar({ callData }) {
   ]
 
   return (
-  <Card className="p-2 border-0">
+    <Card className="p-2 border-0">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold" style={{ color: "#6D84F0" }}>
+            <CardTitle className="text-base font-semibold" style={{ color: "#068FFF" }}>
               Call Heatmap
             </CardTitle>
             <CardDescription className="text-xs text-gray-500">Call volume by day</CardDescription>
@@ -89,13 +89,13 @@ export function CallCalendar({ callData }) {
                 type="button"
                 onClick={() => setMonthPickerOpen((s) => !s)}
                 className="flex items-center gap-2 text-sm font-medium rounded-md border px-3 py-1"
-                style={{ color: "#6D84F0", borderColor: "#E6E9FF", background: "transparent" }}
+                style={{ color: "#068FFF", borderColor: "#E6F3FF", background: "transparent" }}
                 aria-expanded={monthPickerOpen}
                 aria-haspopup="dialog"
               >
                 <span>{monthNames[currentDate.getMonth()].slice(0, 3)}</span>
                 <svg className="h-3 w-3" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6 8l4 4 4-4" stroke="#0c8ae6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6 8l4 4 4-4" stroke="#068FFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
 
@@ -120,7 +120,7 @@ export function CallCalendar({ callData }) {
                       type="button"
                       onClick={() => setYearPicker((prev) => !prev)}
                       className="text-sm font-medium"
-                      style={{ color: "#1F3B9A" }}
+                      style={{ color: "#068FFF" }}
                     >
                       {yearPicker
                         ? `${yearRange[0]} - ${yearRange[1]}`
@@ -152,10 +152,9 @@ export function CallCalendar({ callData }) {
                             setCurrentDate(new Date(currentDate.getFullYear(), idx, 1))
                             setMonthPickerOpen(false)
                           }}
-                          className={`rounded px-2 py-1 text-xs text-left ${
-                            currentDate.getMonth() === idx ? "bg-[#E6EEFF]" : "hover:bg-gray-100"
-                          }`}
-                          style={{ color: "#1F3B9A" }}
+                          className={`rounded px-2 py-1 text-xs text-left ${currentDate.getMonth() === idx ? "bg-[#E6F3FF]" : "hover:bg-gray-100"
+                            }`}
+                          style={{ color: "#068FFF" }}
                         >
                           {m.slice(0, 3)}
                         </button>
@@ -172,10 +171,9 @@ export function CallCalendar({ callData }) {
                               setCurrentDate(new Date(year, currentDate.getMonth(), 1))
                               setYearPicker(false)
                             }}
-                            className={`rounded px-2 py-1 text-xs ${
-                              currentDate.getFullYear() === year ? "bg-[#E6EEFF]" : "hover:bg-gray-100"
-                            }`}
-                            style={{ color: "#1F3B9A" }}
+                            className={`rounded px-2 py-1 text-xs ${currentDate.getFullYear() === year ? "bg-[#E6F3FF]" : "hover:bg-gray-100"
+                              }`}
+                            style={{ color: "#068FFF" }}
                           >
                             {year}
                           </button>
@@ -188,7 +186,7 @@ export function CallCalendar({ callData }) {
 
             </div>
 
-            <span className="text-sm" style={{ color: "#6D84F0" }}>
+            <span className="text-sm" style={{ color: "#068FFF" }}>
               {currentDate.getFullYear()}
             </span>
           </div>
@@ -219,26 +217,25 @@ export function CallCalendar({ callData }) {
                   category === "none"
                     ? "bg-gray-100"
                     : category === "low"
-                    ? "bg-[#E4E8FC]"
-                    : category === "medium"
-                    ? "bg-[#AEBBFA]"
-                    : "bg-[#068fff]"
+                      ? "bg-[#E6F3FF]"
+                      : category === "medium"
+                        ? "bg-[#80C7FF]"
+                        : "bg-[#068FFF]"
 
-                const textColor = category === "high" ? "text-white" : "text-[#3C4BB8]"
+                const textColor = category === "high" ? "text-white" : "text-[#068FFF]"
 
                 return (
                   <Tooltip key={index}>
                     <TooltipTrigger asChild>
                       <div
-                        className={`relative flex h-9 flex-col items-center justify-center rounded-md text-xs cursor-pointer ${bgColor} ${textColor} ${
-                          !day.inCurrentMonth ? "opacity-50" : ""
-                        }`}
-                        style={isToday ? { outline: "2px solid #6D84F0" } : {}}
+                        className={`relative flex h-7 flex-col items-center justify-center rounded-md text-xs cursor-pointer ${bgColor} ${textColor} ${!day.inCurrentMonth ? "opacity-50" : ""
+                          }`}
+                        style={isToday ? { outline: "2px solid #068FFF" } : {}}
                       >
                         <span>{day.date.getDate()}</span>
                       </div>
                     </TooltipTrigger>
-                    <TooltipContent className="bg-gray-100 text-[#6D84F0] border shadow">
+                    <TooltipContent className="bg-gray-100 text-[#068FFF] border shadow">
                       <p className="text-xs">
                         {callCount} calls on {formatDateKey(day.date)}
                       </p>
@@ -249,17 +246,17 @@ export function CallCalendar({ callData }) {
             </div>
 
             {/* Legend */}
-            <div className="mt-3 flex items-center justify-center space-x-3 text-[11px]" style={{ color: "#6D84F0" }}>
+            <div className="mt-3 flex items-center justify-center space-x-3 text-[11px]" style={{ color: "#068FFF" }}>
               <div className="flex items-center">
-                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#E4E8FC]"></div>
+                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#E6F3FF]"></div>
                 <span>Low</span>
               </div>
               <div className="flex items-center">
-                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#AEBBFA]"></div>
+                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#80C7FF]"></div>
                 <span>Medium</span>
               </div>
               <div className="flex items-center">
-                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#6D84F0]"></div>
+                <div className="mr-1 h-2.5 w-2.5 rounded-full bg-[#068FFF]"></div>
                 <span>High</span>
               </div>
             </div>
