@@ -10,6 +10,7 @@ import CustomerSupport from "../assets/add-user.svg";
 // import CreateAgentForm from "./CreateAgentForm";
 import Dashboard from "../pages/overview/page";
 import CallLogs from "../pages/call_logs/page";
+import { PhoneNum } from "@/pages/phone_numbers/page";
 
 function SideNavbar() {
   const [activeItem, setActiveItem] = useState("Overview");
@@ -212,6 +213,9 @@ function SideNavbar() {
             templates={templates}
             updateAgentData={updateAgentData}
           />
+        )}
+        {activeItem === "Phone Number" && (
+          <PhoneNum />
         )}
         {activeItem === "Call Logs" && (
           <div className="flex-1 overflow-y-auto">
