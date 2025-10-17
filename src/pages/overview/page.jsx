@@ -1,6 +1,4 @@
 import React from "react";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { Search } from "lucide-react";
 import { CallCalendar } from "../../components/call-calender";
 import DonutCard from "../../components/ui/pie-chart";
 import CostChart from "../../components/source-bar";

@@ -66,6 +66,60 @@ export function CostChart({ data }) {
         return total + item.facebook + item.instagram + item.whatsapp + item.twitter
     }, 0)
 
+    // Custom tooltip component with animate-ui styling and enhanced total section
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            const total = payload.reduce((sum, entry) => sum + entry.value, 0)
+
+            // Define platform order and colors (darker shades)
+            const platformOrder = ['facebook', 'instagram', 'whatsapp', 'twitter']
+            const platformColors = {
+                facebook: '#068FFF',
+                instagram: '#80C7FF',
+                whatsapp: '#60A5FA',
+                twitter: '#93C5FD'
+            }
+
+            // Sort payload according to our desired order
+            const sortedPayload = platformOrder.map(platform =>
+                payload.find(entry => entry.dataKey === platform)
+            ).filter(Boolean)
+
+            return (
+                <div className="bg-gray-50 border border-gray-200 shadow-lg rounded-t-xl rounded-b-lg p-3 animate-in fade-in-0 zoom-in-95 duration-200">
+                    <div className="space-y-2">
+                        <p className="font-semibold text-gray-900">{label}</p>
+
+                        {/* Individual Platform Values */}
+                        <div className="space-y-1 text-sm">
+                            {sortedPayload.map((entry, index) => (
+                                <div key={index} className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-2">
+                                        <div
+                                            className="w-3 h-3 rounded-full"
+                                            style={{ backgroundColor: platformColors[entry.dataKey] }}
+                                        ></div>
+                                        <span>{entry.name}:</span>
+                                    </div>
+                                    <span className="font-medium">{entry.value.toLocaleString()}</span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Total Section */}
+                        <div className="pt-2 border-t border-gray-200">
+                            <div className="flex items-center justify-between">
+                                <span className="font-semibold text-gray-900">Total:</span>
+                                <span className="font-bold text-blue-600 text-lg">{total.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        return null
+    }
+
     return (
         <Card
             className="w-full"
@@ -147,9 +201,49 @@ export function CostChart({ data }) {
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="h-[200px] w-full">
+                <style>{`
+                    .recharts-wrapper svg {
+                        filter: none !important;
+                    }
+                    .recharts-wrapper svg * {
+                        filter: none !important;
+                        box-shadow: none !important;
+                        drop-shadow: none !important;
+                    }
+                    .recharts-bar-rectangle {
+                        filter: none !important;
+                        box-shadow: none !important;
+                        drop-shadow: none !important;
+                        opacity: 1 !important;
+                    }
+                    .recharts-bar-rectangle:hover {
+                        filter: none !important;
+                        box-shadow: none !important;
+                        drop-shadow: none !important;
+                        opacity: 1 !important;
+                    }
+                    .recharts-active-bar {
+                        filter: none !important;
+                        box-shadow: none !important;
+                        drop-shadow: none !important;
+                        opacity: 1 !important;
+                    }
+                    .recharts-bar {
+                        filter: none !important;
+                        box-shadow: none !important;
+                        drop-shadow: none !important;
+                    }
+                    .recharts-layer {
+                        filter: none !important;
+                    }
+                `}</style>
+                <div className="h-[200px] w-full bg-gray-50 rounded-lg p-4">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={displayedData} margin={{ top: 10, right: 10, bottom: 0, left: 0 }}>
+                        <BarChart
+                            data={displayedData}
+                            margin={{ top: 10, right: 10, bottom: 0, left: 0 }}
+                            style={{ filter: 'none' }}
+                        >
                             <CartesianGrid vertical={false} />
                             <XAxis
                                 dataKey="period"
@@ -159,39 +253,47 @@ export function CostChart({ data }) {
                                 className="text-black"
                             />
                             <Tooltip
-                                contentStyle={{
-                                    backgroundColor: "white",
-                                    borderRadius: "8px",
-                                    border: "1px solid #e5e7eb",
-                                    color: "#000000",
-                                }}
-                                labelStyle={{ fontWeight: 600 }}
+                                content={<CustomTooltip />}
+                                cursor={false}
+                                wrapperStyle={{ outline: 'none' }}
                             />
 
-                            {/* Stacked Bars with call-calendar colors */}
+                            {/* Stacked Bars with distinct blue shades and rounded corners */}
                             <Bar
                                 dataKey="facebook"
                                 stackId="a"
                                 fill="#068FFF"
                                 name="Facebook"
+                                radius={[0, 0, 0, 0]}
+                                maxBarSize={40}
+                                style={{ filter: 'none', dropShadow: 'none' }}
                             />
                             <Bar
                                 dataKey="instagram"
                                 stackId="a"
                                 fill="#80C7FF"
                                 name="Instagram"
+                                radius={[0, 0, 0, 0]}
+                                maxBarSize={40}
+                                style={{ filter: 'none', dropShadow: 'none' }}
                             />
                             <Bar
                                 dataKey="whatsapp"
                                 stackId="a"
-                                fill="#E6F3FF"
+                                fill="#60A5FA"
                                 name="WhatsApp"
+                                radius={[0, 0, 0, 0]}
+                                maxBarSize={40}
+                                style={{ filter: 'none', dropShadow: 'none' }}
                             />
                             <Bar
                                 dataKey="twitter"
                                 stackId="a"
-                                fill="#4A90E2"
+                                fill="#93C5FD"
                                 name="Twitter"
+                                radius={[8, 8, 0, 0]}
+                                maxBarSize={40}
+                                style={{ filter: 'none', dropShadow: 'none' }}
                             />
                         </BarChart>
                     </ResponsiveContainer>
