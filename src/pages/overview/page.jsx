@@ -1,7 +1,8 @@
 import React from "react";
-import { CallCalendar } from "../../components/call-calender";
+// import { CallCalendar } from "../../components/call-calender";
 import DonutCard from "../../components/ui/pie-chart";
 import CostChart from "../../components/source-bar";
+import KeywordTable from "../../components/keyword";
 import { useState } from "react";
 import { generateDailyData } from "../../lib/utils"
 
@@ -44,10 +45,14 @@ const Dashboard = () => {
       {/* Top Summary */}
       <div className="grid grid-cols-4 gap-4 mb-6">
         {[
-          { title: "Call Minutes", value: "42", sub: "+5% " },
-          { title: "Number of Calls", value: "120", sub: "+8% " },
-          { title: "Total Spent", value: "$1,100.00", sub: "-3% " },
-          { title: "Avg. Cost Per Call", value: "$75.12", sub: "+1.5% " },
+          { title: "Total Leads", value: "10,000", sub: "+5% " },
+          { title: "Positive Leads", value: "5,000", sub: "+8% " },
+          { title: "Negative Leads", value: "3,000", sub: "-3% " },
+          { title: "Neutral Leads", value: "2,000", sub: "+1.5% " },
+          { title: "Total Calls", value: "10,000", sub: "+1.5% " },
+          { title: "Positive Calls", value: "5,000", sub: "+1.5% " },
+          { title: "Negative Calls", value: "3,000", sub: "+1.5% " },
+          { title: "Turn around time ", value: "3 mins", sub: "+1.5% " },
         ].map((item, i) => (
           <div key={i} className="bg-white shadow-sm rounded-2xl p-4">
             <h4 className="text-sm font-medium text-gray-500">{item.title}</h4>
@@ -83,7 +88,7 @@ const Dashboard = () => {
       </div>
 
       {/* Middle Section */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-4 gap-4 mb-6">
         {/* Calls by Assistant */}
         {/* <div className="col-span-2 bg-white rounded-2xl shadow-sm p-4">
           <div className="flex justify-between items-center mb-4">
@@ -124,19 +129,21 @@ const Dashboard = () => {
             onDateRangeChange={setDateRange}
           />
         </div>
-        <CallCalendar callData={dummyCallData} />
+        <div className="col-span-2">
+          <KeywordTable />
+        </div>
       </div>
 
       {/* Call Analysis */}
-      <div className="bg-white rounded-2xl shadow-sm p-4">
+      {/* <div className="bg-white rounded-2xl shadow-sm p-4">
         <h4 className="font-semibold mb-4">Call Analysis</h4>
         <p className="text-sm text-gray-500 mb-4">
           Quick overview of your call performance
         </p>
 
-        <div className="grid grid-cols-2 gap-4" style={{ border: 'none', outline: 'none' }}>
-          {/* Reason Call Ended */}
-          <div style={{ border: 'none', outline: 'none', padding: '0', margin: '0' }}>
+        <div className="grid grid-cols-2 gap-4" style={{ border: 'none', outline: 'none' }}> */}
+      {/* Reason Call Ended */}
+      {/* <div style={{ border: 'none', outline: 'none', padding: '0', margin: '0' }}>
             <DonutCard
               title="Reason Call Ended"
               data={[
@@ -147,10 +154,10 @@ const Dashboard = () => {
               ]}
               colors={["#4F46E5", "#22C55E", "#F97316", "#E11D48"]}
             />
-          </div>
+          </div> */}
 
-          {/* Average Call Duration */}
-          <div style={{ border: 'none', outline: 'none', padding: '0', margin: '0' }}>
+      {/* Average Call Duration */}
+      {/* <div style={{ border: 'none', outline: 'none', padding: '0', margin: '0' }}>
             <DonutCard
               title="Average Call Duration by Assistant"
               data={[
@@ -163,7 +170,7 @@ const Dashboard = () => {
             />
           </div>
         </div>
-      </div>
+      </div> */}
 
     </div>
   );
